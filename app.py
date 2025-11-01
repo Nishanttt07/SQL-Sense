@@ -10,7 +10,6 @@ app.secret_key = os.environ.get('SECRET_KEY', 'sql-sense-dev-key-2024')
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-# Initialize AI Handler
 ai_handler = AIHandler()
 
 @app.route('/')
