@@ -1,292 +1,417 @@
-// SQL-Sense Main JavaScript
-class SQLSenseApp {
-    constructor() {
-        this.currentQuery = '';
-        this.queryHistory = [];
-        this.isEditing = false;
-        this.init();
+// main.js - Query Interface JavaScript
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize variables
+    const queryForm = document.getElementById('queryForm');
+    const generateBtn = document.getElementById('generateBtn');
+    const executeBtn = document.getElementById('executeBtn');
+    const editBtn = document.getElementById('editBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const examplesBtn = document.getElementById('examplesBtn');
+    const userPrompt = document.getElementById('userPrompt');
+    const generatedQuery = document.getElementById('generatedQuery');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const emptyResults = document.getElementById('emptyResults');
+    const resultsTable = document.getElementById('resultsTable');
+    const resultsHeader = document.getElementById('resultsHeader');
+    const resultsBody = document.getElementById('resultsBody');
+    const resultsSummary = document.getElementById('resultsSummary');
+    const errorAlert = document.getElementById('errorAlert');
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+    const examplesModal = new bootstrap.Modal(document.getElementById('examplesModal'));
+    const toggleSchemaBtn = document.getElementById('toggleSchemaBtn');
+    const schemaContainer = document.getElementById('schemaContainer');
+    const refreshSchemaBtn = document.getElementById('refreshSchemaBtn');
+    const copySchemaBtn = document.getElementById('copySchemaBtn');
+    const schemaContent = document.getElementById('schemaContent');
+
+    let queryHistory = [];
+    let currentQuery = '';
+
+    // Update UI based on database type
+    function updateUIForDatabaseType() {
+        const dbType = document.body.getAttribute('data-db-type') || 'mysql';
+        
+        if (dbType === 'firebase') {
+            // Change labels and placeholders for Firebase
+            if (userPrompt) {
+                userPrompt.placeholder = 'e.g., Show me all active users, Get products with price over $100, Find orders from the last 7 days...';
+            }
+            if (generateBtn) {
+                generateBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Python Code';
+            }
+            if (generatedQuery) {
+                generatedQuery.placeholder = 'Your generated Python code for Firebase will appear here...';
+            }
+            if (executeBtn) {
+                executeBtn.innerHTML = '<i class="fas fa-play me-1"></i>Run Code';
+            }
+        }
     }
 
-    init() {
-        this.bindEvents();
-        this.loadHistory();
-        this.updateUI();
+    // Initialize UI
+    updateUIForDatabaseType();
+
+    // Auto-show schema on page load if there's content
+    function checkAndShowSchema() {
+        if (schemaContent) {
+            const schemaText = schemaContent.textContent.trim();
+            if (schemaText && schemaText !== 'No schema information available. Please refresh the schema.') {
+                schemaContainer.style.display = 'block';
+                toggleSchemaBtn.innerHTML = '<i class="fas fa-eye-slash me-1"></i>Hide Schema';
+            }
+        }
     }
 
-    bindEvents() {
-        // Query generation form
-        const queryForm = document.getElementById('queryForm');
-        if (queryForm) {
-            queryForm.addEventListener('submit', (e) => this.handleQueryGeneration(e));
-        }
+    // Check schema on page load
+    checkAndShowSchema();
 
-        // Execute query button
-        const executeBtn = document.getElementById('executeBtn');
-        if (executeBtn) {
-            executeBtn.addEventListener('click', () => this.executeQuery());
-        }
-
-        // Edit query button
-        const editBtn = document.getElementById('editBtn');
-        if (editBtn) {
-            editBtn.addEventListener('click', () => this.toggleEditMode());
-        }
-
-        // Copy query button
-        const copyBtn = document.getElementById('copyBtn');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => this.copyQuery());
-        }
-
-        // Examples button
-        const examplesBtn = document.getElementById('examplesBtn');
-        if (examplesBtn) {
-            examplesBtn.addEventListener('click', () => this.showExamples());
-        }
-
-        // Example query clicks
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('example-query')) {
-                this.useExampleQuery(e.target.textContent.trim());
+    // Toggle schema visibility
+    if (toggleSchemaBtn) {
+        toggleSchemaBtn.addEventListener('click', function() {
+            if (schemaContainer.style.display === 'none') {
+                schemaContainer.style.display = 'block';
+                toggleSchemaBtn.innerHTML = '<i class="fas fa-eye-slash me-1"></i>Hide Schema';
+            } else {
+                schemaContainer.style.display = 'none';
+                toggleSchemaBtn.innerHTML = '<i class="fas fa-eye me-1"></i>Show Schema';
             }
         });
-
-        // Generated query textarea changes
-        const generatedQuery = document.getElementById('generatedQuery');
-        if (generatedQuery) {
-            generatedQuery.addEventListener('input', () => {
-                this.currentQuery = generatedQuery.value;
-                this.updateExecuteButton();
-            });
-        }
     }
 
-    async handleQueryGeneration(e) {
-        e.preventDefault();
-        
-        const prompt = document.getElementById('userPrompt').value.trim();
-        if (!prompt) return;
+    // Refresh schema
+    if (refreshSchemaBtn) {
+        refreshSchemaBtn.addEventListener('click', function() {
+            refreshSchemaBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...';
+            refreshSchemaBtn.disabled = true;
 
-        this.showLoading('Generating query...');
+            fetch('/api/get-schema')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showAlert('Error refreshing schema: ' + data.error, 'danger');
+                    } else {
+                        schemaContent.textContent = data.schema;
+                        showAlert('Schema refreshed successfully!', 'success');
+                        checkAndShowSchema();
+                    }
+                })
+                .catch(error => {
+                    showAlert('Error refreshing schema: ' + error.message, 'danger');
+                })
+                .finally(() => {
+                    refreshSchemaBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i>Refresh Schema';
+                    refreshSchemaBtn.disabled = false;
+                });
+        });
+    }
 
-        try {
-            const response = await fetch('/api/generate-query', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt })
+    // Copy schema to clipboard
+    if (copySchemaBtn) {
+        copySchemaBtn.addEventListener('click', function() {
+            const schemaText = schemaContent.textContent;
+            navigator.clipboard.writeText(schemaText).then(() => {
+                const originalText = copySchemaBtn.innerHTML;
+                copySchemaBtn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                setTimeout(() => {
+                    copySchemaBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                showAlert('Failed to copy schema: ' + err, 'danger');
             });
+        });
+    }
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to generate query');
-            }
-
-            if (data.error) {
-                throw new Error(data.error);
-            }
-
-            this.currentQuery = data.query;
-            this.displayGeneratedQuery(data.query);
-            this.addToHistory(prompt, data.query);
+    // Make generated query textarea editable when edit button is clicked
+    if (editBtn) {
+        editBtn.addEventListener('click', function() {
+            const isReadOnly = generatedQuery.readOnly;
+            generatedQuery.readOnly = !isReadOnly;
+            this.innerHTML = isReadOnly ? 
+                '<i class="fas fa-check me-1"></i>Save' : 
+                '<i class="fas fa-edit me-1"></i>Edit';
             
-        } catch (error) {
-            this.showError('Failed to generate query: ' + error.message);
-        } finally {
-            this.hideLoading();
-        }
+            if (!isReadOnly) {
+                generatedQuery.focus();
+            }
+        });
     }
 
-    async executeQuery() {
-        if (!this.currentQuery.trim()) return;
+    // Copy query to clipboard
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+            const queryText = generatedQuery.value;
+            if (!queryText) {
+                showAlert('No query to copy', 'warning');
+                return;
+            }
 
-        this.showLoading('Executing query...');
+            navigator.clipboard.writeText(queryText).then(() => {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                showAlert('Failed to copy query: ' + err, 'danger');
+            });
+        });
+    }
 
-        try {
-            const response = await fetch('/api/execute-query', {
+    // Show examples modal
+    if (examplesBtn) {
+        examplesBtn.addEventListener('click', function() {
+            examplesModal.show();
+        });
+    }
+
+    // Example query click handler
+    document.querySelectorAll('.example-query').forEach(item => {
+        item.addEventListener('click', function() {
+            userPrompt.value = this.textContent.trim();
+            examplesModal.hide();
+        });
+    });
+
+    // Generate query form submission
+    if (queryForm) {
+        queryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const promptText = userPrompt.value.trim();
+            if (!promptText) {
+                showAlert('Please enter a query description', 'warning');
+                return;
+            }
+
+            // Show loading modal
+            const loadingMessage = document.getElementById('loadingMessage');
+            const dbType = document.body.getAttribute('data-db-type') || 'mysql';
+            loadingMessage.textContent = dbType === 'firebase' ? 
+                'Generating Python code...' : 'Generating SQL query...';
+            loadingModal.show();
+
+            // Disable generate button
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
+
+            fetch('/api/generate-query', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query: this.currentQuery })
+                body: JSON.stringify({
+                    prompt: promptText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingModal.hide();
+                
+                if (data.error) {
+                    showAlert('Error generating query: ' + data.error, 'danger');
+                } else {
+                    generatedQuery.value = data.query;
+                    currentQuery = data.query;
+                    
+                    // Enable execute and action buttons
+                    executeBtn.disabled = false;
+                    editBtn.disabled = false;
+                    copyBtn.disabled = false;
+                    
+                    // Add to history
+                    addToQueryHistory(promptText, data.query);
+                    
+                    showAlert('Query generated successfully!', 'success');
+                }
+            })
+            .catch(error => {
+                loadingModal.hide();
+                showAlert('Error generating query: ' + error.message, 'danger');
+            })
+            .finally(() => {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = dbType === 'firebase' ? 
+                    '<i class="fas fa-magic me-2"></i>Generate Python Code' : 
+                    '<i class="fas fa-magic me-2"></i>Generate SQL Query';
+            });
+        });
+    }
+
+    // Execute query
+    if (executeBtn) {
+        executeBtn.addEventListener('click', function() {
+            const query = generatedQuery.value.trim();
+            if (!query) {
+                showAlert('No query to execute', 'warning');
+                return;
+            }
+
+            // Show loading
+            executeBtn.disabled = true;
+            executeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Running...';
+
+            fetch('/api/execute-query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: query
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    displayResults(data);
+                    showAlert('Query executed successfully!', 'success');
+                }
+            })
+            .catch(error => {
+                showError('Error executing query: ' + error.message);
+            })
+            .finally(() => {
+                executeBtn.disabled = false;
+                const dbType = document.body.getAttribute('data-db-type') || 'mysql';
+                executeBtn.innerHTML = dbType === 'firebase' ? 
+                    '<i class="fas fa-play me-1"></i>Run Code' : 
+                    '<i class="fas fa-play me-1"></i>Run Query';
+            });
+        });
+    }
+
+    // Display query results
+    function displayResults(data) {
+        // Hide empty results message and error alert
+        emptyResults.style.display = 'none';
+        errorAlert.style.display = 'none';
+        
+        // Show results table
+        resultsTable.style.display = 'block';
+
+        if (data.data && Array.isArray(data.data)) {
+            // Regular tabular data
+            const columns = data.columns || (data.data.length > 0 ? Object.keys(data.data[0]) : []);
+            
+            // Build header
+            resultsHeader.innerHTML = '';
+            const headerRow = document.createElement('tr');
+            columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col;
+                th.scope = 'col';
+                headerRow.appendChild(th);
+            });
+            resultsHeader.appendChild(headerRow);
+
+            // Build body
+            resultsBody.innerHTML = '';
+            data.data.forEach(row => {
+                const tr = document.createElement('tr');
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    let value = row[col];
+                    
+                    // Format the value for display
+                    if (value === null || value === undefined) {
+                        value = 'NULL';
+                    } else if (typeof value === 'object') {
+                        value = JSON.stringify(value);
+                    } else if (typeof value === 'boolean') {
+                        value = value ? 'true' : 'false';
+                    }
+                    
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                resultsBody.appendChild(tr);
             });
 
-            const data = await response.json();
+            // Update summary
+            const execTime = data.execution_time ? ` in ${data.execution_time}s` : '';
+            resultsSummary.textContent = `Returned ${data.row_count || data.data.length} row(s)${execTime}`;
 
-            if (!response.ok) {
-                throw new Error(data.error || `Server error: ${response.status}`);
-            }
+        } else if (data.result !== undefined) {
+            // Single result (for Firebase operations)
+            resultsHeader.innerHTML = '';
+            resultsBody.innerHTML = '';
+            
+            const headerRow = document.createElement('tr');
+            const th = document.createElement('th');
+            th.textContent = 'Result';
+            th.scope = 'col';
+            headerRow.appendChild(th);
+            resultsHeader.appendChild(headerRow);
 
-            if (data.error) {
-                throw new Error(data.error);
-            }
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.textContent = typeof data.result === 'object' ? 
+                JSON.stringify(data.result, null, 2) : 
+                String(data.result);
+            tr.appendChild(td);
+            resultsBody.appendChild(tr);
 
-            this.displayResults(data);
+            resultsSummary.textContent = data.message || 'Operation completed';
 
-        } catch (error) {
-            console.error('Query execution error:', error);
-            this.showError('Failed to execute query: ' + error.message);
-        } finally {
-            this.hideLoading();
+        } else if (data.affected_rows !== undefined) {
+            // Non-SELECT operation
+            resultsHeader.innerHTML = '';
+            resultsBody.innerHTML = '';
+            
+            const headerRow = document.createElement('tr');
+            const th = document.createElement('th');
+            th.textContent = 'Message';
+            th.scope = 'col';
+            headerRow.appendChild(th);
+            resultsHeader.appendChild(headerRow);
+
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.textContent = data.message || `Affected ${data.affected_rows} row(s)`;
+            tr.appendChild(td);
+            resultsBody.appendChild(tr);
+
+            resultsSummary.textContent = 'Operation completed successfully';
         }
     }
 
-    displayGeneratedQuery(query) {
-        const textarea = document.getElementById('generatedQuery');
-        textarea.value = query;
-        textarea.readOnly = true;
-        
-        this.updateExecuteButton();
-        this.updateEditButton();
-        this.updateCopyButton();
-        
-        // Scroll to generated query
-        textarea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    displayResults(result) {
-        const emptyResults = document.getElementById('emptyResults');
-        const resultsTable = document.getElementById('resultsTable');
-        const resultsHeader = document.getElementById('resultsHeader');
-        const resultsBody = document.getElementById('resultsBody');
-        const resultsSummary = document.getElementById('resultsSummary');
-        const errorAlert = document.getElementById('errorAlert');
-
-        // Hide error and empty state
-        errorAlert.style.display = 'none';
+    // Show error message
+    function showError(message) {
         emptyResults.style.display = 'none';
         resultsTable.style.display = 'none';
-
-        // Clear previous results
-        resultsHeader.innerHTML = '';
-        resultsBody.innerHTML = '';
-        resultsSummary.textContent = '';
-
-        // Check if result has error
-        if (result && result.error) {
-            this.showError(result.error);
-            return;
-        }
-
-        // Check if we have data array
-        if (result && result.data && Array.isArray(result.data)) {
-            const dataArray = result.data;
-            
-            if (dataArray.length > 0) {
-                // Get column names from first object
-                const firstRow = dataArray[0];
-                const headers = Object.keys(firstRow);
-                
-                // Create table header
-                resultsHeader.innerHTML = '<tr>' + headers.map(header => 
-                    `<th>${this.formatHeader(header)}</th>`
-                ).join('') + '</tr>';
-
-                // Create table body
-                resultsBody.innerHTML = dataArray.map(row => 
-                    '<tr>' + headers.map(header => 
-                        `<td>${this.formatCellValue(row[header])}</td>`
-                    ).join('') + '</tr>'
-                ).join('');
-
-                // Update summary
-                resultsSummary.textContent = `Showing ${dataArray.length} row(s)`;
-
-                // Show table
-                resultsTable.style.display = 'block';
-            } else {
-                emptyResults.style.display = 'block';
-                emptyResults.innerHTML = `
-                    <i class="fas fa-info-circle fa-3x mb-3 text-muted"></i>
-                    <p>Query executed successfully but returned no results.</p>
-                `;
-            }
-        } else {
-            // Handle unexpected response format
-            console.warn('Unexpected response format:', result);
-            this.showError('Unexpected response format from server');
-        }
-    }
-
-    formatHeader(header) {
-        return header.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    }
-
-    formatCellValue(value) {
-        if (value === null || value === undefined) return '<em>null</em>';
-        if (typeof value === 'boolean') return value ? '✓' : '✗';
-        if (typeof value === 'object') return JSON.stringify(value);
-        return value.toString();
-    }
-
-    toggleEditMode() {
-        const textarea = document.getElementById('generatedQuery');
-        const editBtn = document.getElementById('editBtn');
         
-        this.isEditing = !this.isEditing;
-        textarea.readOnly = !this.isEditing;
-        
-        if (this.isEditing) {
-            editBtn.innerHTML = '<i class="fas fa-check me-1"></i>Save';
-            editBtn.classList.remove('btn-outline-secondary');
-            editBtn.classList.add('btn-success');
-            textarea.focus();
-        } else {
-            editBtn.innerHTML = '<i class="fas fa-edit me-1"></i>Edit Query';
-            editBtn.classList.remove('btn-success');
-            editBtn.classList.add('btn-outline-secondary');
-            this.currentQuery = textarea.value;
-        }
-        
-        this.updateExecuteButton();
+        errorAlert.style.display = 'block';
+        errorAlert.textContent = message;
     }
 
-    copyQuery() {
-        const textarea = document.getElementById('generatedQuery');
-        textarea.select();
-        document.execCommand('copy');
-        
-        // Show temporary feedback
-        const originalText = document.getElementById('copyBtn').innerHTML;
-        document.getElementById('copyBtn').innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
-        setTimeout(() => {
-            document.getElementById('copyBtn').innerHTML = originalText;
-        }, 2000);
-    }
-
-    showExamples() {
-        const modal = new bootstrap.Modal(document.getElementById('examplesModal'));
-        modal.show();
-    }
-
-    useExampleQuery(example) {
-        document.getElementById('userPrompt').value = example;
-        const modal = bootstrap.Modal.getInstance(document.getElementById('examplesModal'));
-        modal.hide();
-    }
-
-    addToHistory(prompt, query) {
+    // Add query to history
+    function addToQueryHistory(prompt, query) {
         const historyItem = {
-            prompt,
-            query,
+            prompt: prompt,
+            query: query,
             timestamp: new Date().toLocaleString()
         };
         
-        this.queryHistory.unshift(historyItem);
-        if (this.queryHistory.length > 10) {
-            this.queryHistory = this.queryHistory.slice(0, 10);
+        queryHistory.unshift(historyItem);
+        
+        // Keep only last 10 items
+        if (queryHistory.length > 10) {
+            queryHistory = queryHistory.slice(0, 10);
         }
         
-        this.saveHistory();
-        this.renderHistory();
+        updateQueryHistoryDisplay();
     }
 
-    renderHistory() {
+    // Update query history display
+    function updateQueryHistoryDisplay() {
         const historyContainer = document.getElementById('queryHistory');
+        if (!historyContainer) return;
         
-        if (this.queryHistory.length === 0) {
+        historyContainer.innerHTML = '';
+        
+        if (queryHistory.length === 0) {
             historyContainer.innerHTML = `
                 <div class="text-center text-muted py-3">
                     <i class="fas fa-history fa-2x mb-2"></i>
@@ -295,91 +420,91 @@ class SQLSenseApp {
             `;
             return;
         }
-
-        historyContainer.innerHTML = this.queryHistory.map((item, index) => `
-            <div class="list-group-item">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="flex-grow-1">
-                        <div class="query-prompt">${item.prompt}</div>
-                        <div class="query-sql">${item.query}</div>
-                        <small class="text-muted">${item.timestamp}</small>
-                    </div>
-                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="app.useHistoryItem(${index})">
-                        <i class="fas fa-redo"></i>
+        
+        queryHistory.forEach((item, index) => {
+            const historyElement = document.createElement('div');
+            historyElement.className = 'list-group-item';
+            historyElement.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">${item.prompt}</h6>
+                    <small>${item.timestamp}</small>
+                </div>
+                <p class="mb-1 font-monospace small text-muted">${item.query.substring(0, 100)}${item.query.length > 100 ? '...' : ''}</p>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-primary use-query" data-index="${index}">
+                        <i class="fas fa-redo me-1"></i>Use Again
                     </button>
                 </div>
-            </div>
-        `).join('');
+            `;
+            historyContainer.appendChild(historyElement);
+        });
+        
+        // Add event listeners for "Use Again" buttons
+        document.querySelectorAll('.use-query').forEach(button => {
+            button.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                const historyItem = queryHistory[index];
+                
+                userPrompt.value = historyItem.prompt;
+                generatedQuery.value = historyItem.query;
+                currentQuery = historyItem.query;
+                
+                // Enable execute and action buttons
+                executeBtn.disabled = false;
+                editBtn.disabled = false;
+                copyBtn.disabled = false;
+                
+                showAlert('Query loaded from history', 'info');
+            });
+        });
     }
 
-    useHistoryItem(index) {
-        const item = this.queryHistory[index];
-        document.getElementById('userPrompt').value = item.prompt;
-        this.displayGeneratedQuery(item.query);
-    }
+    // Helper function to show alerts
+    function showAlert(message, type) {
+        // Remove any existing custom alerts
+        const existingAlerts = document.querySelectorAll('.custom-alert');
+        existingAlerts.forEach(alert => alert.remove());
 
-    saveHistory() {
-        localStorage.setItem('sqlSenseHistory', JSON.stringify(this.queryHistory));
-    }
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} custom-alert alert-dismissible fade show mt-3`;
+        alertDiv.innerHTML = `
+            <i class="fas fa-${getAlertIcon(type)} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Insert after the connection alert or at the top of the container
+        const connectionAlert = document.getElementById('connectionAlert');
+        if (connectionAlert) {
+            connectionAlert.parentNode.insertBefore(alertDiv, connectionAlert.nextSibling);
+        } else {
+            document.querySelector('.container-fluid').insertBefore(alertDiv, document.querySelector('.container-fluid').firstChild);
+        }
 
-    loadHistory() {
-        const saved = localStorage.getItem('sqlSenseHistory');
-        if (saved) {
-            this.queryHistory = JSON.parse(saved);
-            this.renderHistory();
+        // Auto remove after 5 seconds if not danger
+        if (type !== 'danger') {
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
         }
     }
 
-    updateExecuteButton() {
-        const executeBtn = document.getElementById('executeBtn');
-        executeBtn.disabled = !this.currentQuery.trim();
-    }
-
-    updateEditButton() {
-        const editBtn = document.getElementById('editBtn');
-        editBtn.disabled = !this.currentQuery.trim();
-    }
-
-    updateCopyButton() {
-        const copyBtn = document.getElementById('copyBtn');
-        copyBtn.disabled = !this.currentQuery.trim();
-    }
-
-    updateUI() {
-        this.updateExecuteButton();
-        this.updateEditButton();
-        this.updateCopyButton();
-    }
-
-    showLoading(message = 'Loading...') {
-        document.getElementById('loadingMessage').textContent = message;
-        const modal = new bootstrap.Modal(document.getElementById('loadingModal'));
-        modal.show();
-    }
-
-    hideLoading() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('loadingModal'));
-        if (modal) {
-            modal.hide();
+    // Get appropriate icon for alert type
+    function getAlertIcon(type) {
+        switch (type) {
+            case 'success': return 'check-circle';
+            case 'danger': return 'exclamation-triangle';
+            case 'warning': return 'exclamation-circle';
+            case 'info': return 'info-circle';
+            default: return 'info-circle';
         }
     }
 
-    showError(message) {
-        const errorAlert = document.getElementById('errorAlert');
-        errorAlert.textContent = message;
-        errorAlert.style.display = 'block';
-        
-        // Hide other result displays
-        document.getElementById('emptyResults').style.display = 'none';
-        document.getElementById('resultsTable').style.display = 'none';
-        
-        // Scroll to error
-        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-}
+    // Initialize query history display
+    updateQueryHistoryDisplay();
 
-// Initialize the app when DOM is loaded
-let app;
-document.addEventListener('DOMContentLoaded', function() {
-    app = new SQLSenseApp();
+    // Debug: Log initialization
+    console.log('Query interface initialized');
 });

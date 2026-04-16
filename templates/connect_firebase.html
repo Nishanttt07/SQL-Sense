@@ -1,72 +1,500 @@
+<!--connect_firebase.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect to Firebase - SQL-Sense</title>
+    <title>Firebase Query Interface - SQL-Sense</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ffa500;
+            --primary-dark: #cc8400;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-bottom: none;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #b37400 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+        }
+        
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(255, 165, 0, 0.25);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .table-dark {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .debug-panel {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            border: 1px solid #333;
+        }
+        
+        .status-success { color: #00ff00; }
+        .status-error { color: #ff4444; }
+        .status-warning { color: #ffaa00; }
+        .status-info { color: #44aaff; }
+        
+        .debug-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #000;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .connection-status {
+            transition: all 0.3s ease;
+        }
+        
+        .query-result {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .schema-panel {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+        }
+        
+        .testfirebase-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Edit button specific styles */
+        .query-editing {
+            border: 2px solid #28a745 !important;
+            background-color: rgba(40, 167, 69, 0.1) !important;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+        }
+        
+        .edit-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .query-display {
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .copy-btn:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
+            <a class="navbar-brand" href="/">
                 <i class="fas fa-brain me-2"></i>SQL-Sense
             </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <i class="fas fa-fire me-1"></i>Firebase Query Interface
+                    <span class="testfirebase-badge">Using TestFirebase</span>
+                </span>
+            </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
+    <div class="container mt-4">
+        <!-- Connection Panel -->
+        <div class="row" id="connectionPanel">
+            <div class="col-12">
+                <div class="card mb-4">
                     <div class="card-header">
                         <h4 class="mb-0">
-                            <i class="fas fa-fire me-2"></i>Connect to Firebase
+                            <i class="fas fa-fire me-2"></i>Connect to Firebase using TestFirebase
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST" id="firebaseForm">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="database_url" class="form-label">Database URL</label>
-                                    <input type="url" class="form-control" id="database_url" name="database_url" 
-                                           placeholder="https://your-project.firebaseio.com" required>
-                                    <div class="form-text">Found in Firebase Console → Realtime Database → Database URL</div>
-                                </div>
-                                <div class="col-12">
-                                    <label for="service_account_key" class="form-label">Service Account Key JSON</label>
-                                    <textarea class="form-control" id="service_account_key" name="service_account_key" 
-                                              rows="8" placeholder='Paste your entire service account key JSON here' required></textarea>
-                                    <div class="form-text">
-                                        Generate this in Firebase Console → Project Settings → Service Accounts → Generate New Private Key
+                        <!-- Connection Status Alert -->
+                        <div id="connectionStatusAlert" class="alert alert-info connection-status" style="display: none;">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <span id="connectionStatusText">Testing connection...</span>
+                        </div>
+
+                        <!-- Error Alert -->
+                        <div id="errorAlert" class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Connection Failed:</strong> <span id="errorText"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Success Alert -->
+                        <div id="successAlert" class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>Success!</strong> <span id="successText"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <form id="firebaseForm">
+                            <!-- Quick Connect - JSON Method -->
+                            <div class="mb-4">
+                                <h5 class="text-warning">
+                                    <i class="fas fa-bolt me-2"></i>Quick Connect (Recommended)
+                                </h5>
+                                <div class="mb-3">
+                                    <label for="service_account_json" class="form-label">Paste Service Account JSON</label>
+                                    <textarea class="form-control" id="service_account_json" name="service_account_json" 
+                                              rows="10" placeholder='{
+  "type": "service_account",
+  "project_id": "your-project-id",
+  "private_key_id": "your-private-key-id",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-xxx@your-project.iam.gserviceaccount.com",
+  "client_id": "your-client-id",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xxx%40your-project.iam.gserviceaccount.com"
+}'></textarea>
+                                    <div class="form-text text-light">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Paste the complete service account JSON from Firebase Console → Project Settings → Service Accounts → Generate New Private Key
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Using TestFirebase Engine:</strong> This connection uses the proven TestFirebase module for reliable Firebase connectivity and schema loading.
+                            </div>
+
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-warning btn-lg">
-                                    <i class="fas fa-plug me-2"></i>Connect to Firebase
+                                <button type="submit" class="btn btn-warning btn-lg w-100 glow" id="connectBtn">
+                                    <i class="fas fa-plug me-2"></i>Connect to Firebase using TestFirebase
                                 </button>
-                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary ms-2">
-                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                <a href="/" class="btn btn-outline-light w-100 mt-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Database Selection
                                 </a>
                             </div>
                         </form>
+                    </div>
+                </div>
 
-                        <!-- Firebase Help -->
-                        <div class="mt-4">
-                            <div class="alert alert-info">
-                                <h6><i class="fas fa-info-circle me-2"></i>Firebase Setup Instructions:</h6>
-                                <ol class="mb-0">
-                                    <li>Go to Firebase Console and select your project</li>
-                                    <li>Navigate to Project Settings → Service Accounts</li>
-                                    <li>Click "Generate New Private Key"</li>
-                                    <li>Copy the entire JSON content and paste above</li>
-                                    <li>Get Database URL from Realtime Database section</li>
-                                </ol>
+                <!-- Instructions Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-question-circle me-2"></i>How to Get Firebase Credentials
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered list-group-flush">
+                            <li class="list-group-item bg-transparent text-light">
+                                Go to <a href="https://console.firebase.google.com/" target="_blank" class="text-warning">Firebase Console</a>
+                            </li>
+                            <li class="list-group-item bg-transparent text-light">
+                                Select your project or create a new one
+                            </li>
+                            <li class="list-group-item bg-transparent text-light">
+                                Click on the gear icon → Project Settings
+                            </li>
+                            <li class="list-group-item bg-transparent text-light">
+                                Go to "Service Accounts" tab
+                            </li>
+                            <li class="list-group-item bg-transparent text-light">
+                                Click "Generate New Private Key"
+                            </li>
+                            <li class="list-group-item bg-transparent text-light">
+                                Copy the entire JSON content and paste it above
+                            </li>
+                        </ol>
+                        <div class="mt-3 alert alert-info">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            <strong>Security Note:</strong> Your Firebase credentials are processed securely and never stored on our servers.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Query Interface (Initially Hidden) -->
+        <div class="row hidden" id="queryInterface">
+            <div class="col-12">
+                <!-- Connection Info Card -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-fire me-2"></i>Firebase Query Interface
+                            <span class="testfirebase-badge">TestFirebase Engine</span>
+                        </h4>
+                        <div>
+                            <span class="badge bg-success me-2" id="connectionBadge">
+                                <i class="fas fa-check-circle me-1"></i>Connected
+                            </span>
+                            <button class="btn btn-sm btn-outline-light" onclick="disconnect()">
+                                <i class="fas fa-sign-out-alt me-1"></i>Disconnect
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-info-circle me-2"></i>Connection Info</h6>
+                                <p class="mb-1"><strong>Project:</strong> <span id="projectInfo">Loading...</span></p>
+                                <p class="mb-1"><strong>Collections:</strong> <span id="collectionsInfo">Loading...</span></p>
+                                <p class="mb-1"><strong>Engine:</strong> <span class="badge bg-danger">TestFirebase</span></p>
+                                <p class="mb-0"><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
                             </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-warning btn-sm" onclick="testQuery('List all collections')">
+                                        <i class="fas fa-list me-1"></i>List Collections
+                                    </button>
+                                    <button class="btn btn-outline-info btn-sm" onclick="loadSchema()">
+                                        <i class="fas fa-sync me-1"></i>Refresh Schema
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="clearResults()">
+                                        <i class="fas fa-trash me-1"></i>Clear Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Query Input Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-terminal me-2"></i>Query Generator
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="queryPrompt" class="form-label">Describe what you want to query:</label>
+                            <textarea class="form-control" id="queryPrompt" rows="3" 
+                                      placeholder="e.g., Get all users who are active and created in the last 7 days, ordered by creation date"></textarea>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-8">
+                                <button class="btn btn-warning w-100" onclick="generateQuery()" id="generateBtn">
+                                    <i class="fas fa-magic me-2"></i>Generate Firebase Query
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-info w-100" onclick="executeQuery()" id="executeBtn" disabled>
+                                    <i class="fas fa-play me-2"></i>Execute Query
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generated Query Card -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-code me-2"></i>Generated Firebase Query
+                        </h5>
+                        <div>
+                            <button class="btn btn-sm btn-outline-warning" id="editQueryBtn" onclick="toggleEditQuery()" disabled>
+                                <i class="fas fa-edit me-1"></i>Edit Query
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 query-display">
+                            <label class="form-label">Generated Python/Firestore Code:</label>
+                            <textarea class="form-control bg-dark text-light p-3 rounded font-monospace" 
+                                      id="generatedQuery" 
+                                      rows="10" 
+                                      style="min-height: 200px; font-family: 'Courier New', monospace;"
+                                      readonly
+                                      placeholder="# Your generated Firebase query will appear here..."></textarea>
+                            <button class="btn btn-sm btn-outline-info copy-btn" id="copyQueryBtn" onclick="copyQueryToClipboard()" style="display: none;">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="edit-controls" id="editControls" style="display: none;">
+                            <button class="btn btn-success btn-sm" onclick="saveEditedQuery()">
+                                <i class="fas fa-check me-1"></i>Save Changes
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="cancelEditQuery()">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </button>
+                            <button class="btn btn-outline-info btn-sm" onclick="copyQueryToClipboard()">
+                                <i class="fas fa-copy me-1"></i>Copy to Clipboard
+                            </button>
+                        </div>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This is auto-generated Firebase Firestore Python code using TestFirebase engine. You can edit it if needed before executing.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Query Results Card -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-table me-2"></i>Query Results
+                        </h5>
+                        <div>
+                            <span class="badge bg-info" id="resultCount">0 results</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="resultsContainer">
+                            <div class="text-center text-muted p-4">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <p>No results yet. Generate and execute a query to see data here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schema Information Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-database me-2"></i>Database Schema
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="schema-panel">
+                            <pre class="text-light" id="schemaContent">Loading schema...</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Panel -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card debug-panel">
+                    <div class="card-header">
+                        <h6 class="mb-0 text-warning">
+                            <i class="fas fa-bug me-2"></i>Debug Panel - TestFirebase Engine
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-info w-100" onclick="testConnection()">
+                                    <i class="fas fa-vial me-1"></i>Test Connection
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-warning w-100" onclick="checkSession()">
+                                    <i class="fas fa-cog me-1"></i>Check Session
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="clearSession()">
+                                    <i class="fas fa-trash me-1"></i>Clear Session
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-success w-100" onclick="loadSchema()">
+                                    <i class="fas fa-sync me-1"></i>Refresh Schema
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary w-100" onclick="showConnectionPanel()">
+                                    <i class="fas fa-plug me-1"></i>Reconnect
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="toggleDebug()">
+                                    <i class="fas fa-eye me-1"></i>Toggle Debug
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="debug-log" id="debugOutput">
+                            <div class="status-info">Debug panel ready. TestFirebase connection interface loaded.</div>
                         </div>
                     </div>
                 </div>
@@ -75,5 +503,668 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Updated JavaScript section for connect_firebase.html with Edit functionality
+
+        let isConnected = false;
+        let generatedQueryCode = '';
+        let currentProject = '';
+        let currentCollections = [];
+        let currentConnectionId = '';
+        let isEditingQuery = false;
+        let originalQueryCode = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            addDebugLog('TestFirebase Query Interface loaded with Server Cache', 'info');
+            checkExistingConnection();
+        });
+
+        document.getElementById('firebaseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            connectToFirebase();
+        });
+
+        function connectToFirebase() {
+            const serviceAccountJson = document.getElementById('service_account_json').value.trim();
+            
+            if (!serviceAccountJson) {
+                showError('Please provide Firebase service account JSON');
+                return;
+            }
+
+            let firebaseJson;
+            try {
+                firebaseJson = JSON.parse(serviceAccountJson);
+            } catch (e) {
+                showError('Invalid JSON format: ' + e.message);
+                return;
+            }
+
+            showConnectionStatus('Connecting to Firebase...', 'info');
+            setButtonLoading(true);
+
+            addDebugLog('Connecting to Firebase...', 'info');
+            addDebugLog('Project: ' + firebaseJson.project_id, 'info');
+
+            // Test connection first
+            fetch('/test-connection', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 
+                    db_type: 'firebase', 
+                    credentials: { service_account_json: serviceAccountJson } 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addDebugLog('✅ Connection test successful!', 'success');
+                    return storeConnection(serviceAccountJson, data);
+                } else {
+                    throw new Error(data.error || 'Connection test failed');
+                }
+            })
+            .catch(error => {
+                addDebugLog('❌ Connection failed: ' + error.message, 'error');
+                showError('Connection failed: ' + error.message);
+                setButtonLoading(false);
+            });
+        }
+
+        function storeConnection(serviceAccountJson, connectionData) {
+            addDebugLog('Storing connection with server cache...', 'info');
+            
+            fetch('/api/firebase/store-connection', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    service_account_json: serviceAccountJson,
+                    schema_data: connectionData.schema_data
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    addDebugLog('✅ Connection stored successfully! Connection ID: ' + data.connection_id, 'success');
+                    showSuccess('Connected successfully! Using server cache for optimal performance.');
+                    
+                    isConnected = true;
+                    currentConnectionId = data.connection_id;
+                    
+                    // Store connection_id in localStorage for persistence
+                    localStorage.setItem('firebase_connection_id', currentConnectionId);
+                    
+                    // Extract project info from JSON
+                    try {
+                        const jsonData = JSON.parse(serviceAccountJson);
+                        currentProject = jsonData.project_id;
+                        document.getElementById('projectInfo').textContent = currentProject;
+                    } catch (e) {
+                        console.error('Error parsing JSON:', e);
+                    }
+                    
+                    // Set collections from response
+                    if (data.collections && data.collections.length > 0) {
+                        currentCollections = data.collections;
+                        document.getElementById('collectionsInfo').textContent = currentCollections.join(', ');
+                        addDebugLog('✅ Collections loaded from response: ' + currentCollections.length, 'success');
+                    } else {
+                        // If no collections in response, try to load them
+                        loadCollections();
+                    }
+                    
+                    // Update UI immediately
+                    showQueryInterface();
+                    
+                    // Load schema
+                    loadSchema();
+                    
+                } else {
+                    throw new Error(data.error || 'Failed to store connection');
+                }
+            })
+            .catch(error => {
+                addDebugLog('❌ Failed to store connection: ' + error.message, 'error');
+                showError('Failed to store connection: ' + error.message);
+            })
+            .finally(() => {
+                setButtonLoading(false);
+            });
+        }
+
+        function loadCollections() {
+            if (!isConnected) return;
+            
+            addDebugLog('Loading collections from cache...', 'info');
+            
+            fetch('/api/firebase/collections')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.collections) {
+                    currentCollections = data.collections;
+                    document.getElementById('collectionsInfo').textContent = currentCollections.join(', ');
+                    addDebugLog('✅ Collections loaded from cache: ' + currentCollections.length, 'success');
+                } else {
+                    document.getElementById('collectionsInfo').textContent = data.error || 'Error loading collections';
+                    addDebugLog('❌ Failed to load collections: ' + (data.error || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                document.getElementById('collectionsInfo').textContent = 'Error loading collections';
+                addDebugLog('❌ Error loading collections: ' + error.message, 'error');
+            });
+        }
+
+        function showQueryInterface() {
+            document.getElementById('connectionPanel').classList.add('hidden');
+            document.getElementById('queryInterface').classList.remove('hidden');
+            
+            // Update connection info with cache status
+            document.querySelector('.testfirebase-badge').textContent = 'TestFirebase + Server Cache';
+        }
+
+        function showConnectionPanel() {
+            document.getElementById('queryInterface').classList.add('hidden');
+            document.getElementById('connectionPanel').classList.remove('hidden');
+            isConnected = false;
+            currentProject = '';
+            currentCollections = [];
+            currentConnectionId = '';
+            
+            // Clear localStorage when showing connection panel
+            localStorage.removeItem('firebase_connection_id');
+        }
+
+        function generateQuery() {
+            if (!isConnected) {
+                showError('Not connected to Firebase');
+                return;
+            }
+
+            const prompt = document.getElementById('queryPrompt').value.trim();
+            if (!prompt) {
+                showError('Please enter a query description');
+                return;
+            }
+
+            setGenerateButtonLoading(true);
+            addDebugLog('Generating query using cached schema...', 'info');
+
+            fetch('/api/generate-query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    prompt: prompt
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.query) {
+                    generatedQueryCode = data.query;
+                    document.getElementById('generatedQuery').value = data.query;
+                    document.getElementById('executeBtn').disabled = false;
+                    document.getElementById('editQueryBtn').disabled = false;
+                    document.getElementById('copyQueryBtn').style.display = 'block';
+                    addDebugLog('✅ Query generated successfully using cached schema', 'success');
+                    
+                    // Reset edit state
+                    resetEditState();
+                } else {
+                    throw new Error(data.error || 'Failed to generate query');
+                }
+            })
+            .catch(error => {
+                addDebugLog('❌ Query generation failed: ' + error.message, 'error');
+                showError('Query generation failed: ' + error.message);
+            })
+            .finally(() => {
+                setGenerateButtonLoading(false);
+            });
+        }
+
+        function toggleEditQuery() {
+            if (!generatedQueryCode) {
+                showError('No query to edit');
+                return;
+            }
+
+            const queryTextarea = document.getElementById('generatedQuery');
+            const editBtn = document.getElementById('editQueryBtn');
+            const editControls = document.getElementById('editControls');
+            const copyBtn = document.getElementById('copyQueryBtn');
+
+            if (!isEditingQuery) {
+                // Start editing
+                isEditingQuery = true;
+                originalQueryCode = queryTextarea.value;
+                
+                // Enable editing
+                queryTextarea.readOnly = false;
+                queryTextarea.classList.add('query-editing');
+                
+                // Update button
+                editBtn.innerHTML = '<i class="fas fa-times me-1"></i>Cancel Edit';
+                editBtn.classList.remove('btn-outline-warning');
+                editBtn.classList.add('btn-outline-danger');
+                
+                // Show edit controls
+                editControls.style.display = 'flex';
+                
+                // Hide copy button while editing
+                copyBtn.style.display = 'none';
+                
+                addDebugLog('Query editing mode activated', 'info');
+            } else {
+                // Cancel editing
+                cancelEditQuery();
+            }
+        }
+
+        function saveEditedQuery() {
+            const queryTextarea = document.getElementById('generatedQuery');
+            const newQuery = queryTextarea.value.trim();
+            
+            if (!newQuery) {
+                showError('Query cannot be empty');
+                return;
+            }
+            
+            // Update the generated query code
+            generatedQueryCode = newQuery;
+            
+            // Exit edit mode
+            isEditingQuery = false;
+            queryTextarea.readOnly = true;
+            queryTextarea.classList.remove('query-editing');
+            
+            // Update button
+            document.getElementById('editQueryBtn').innerHTML = '<i class="fas fa-edit me-1"></i>Edit Query';
+            document.getElementById('editQueryBtn').classList.remove('btn-outline-danger');
+            document.getElementById('editQueryBtn').classList.add('btn-outline-warning');
+            
+            // Hide edit controls
+            document.getElementById('editControls').style.display = 'none';
+            
+            // Show copy button again
+            document.getElementById('copyQueryBtn').style.display = 'block';
+            
+            addDebugLog('Query edited and saved successfully', 'success');
+            showSuccess('Query edited successfully!');
+        }
+
+        function cancelEditQuery() {
+            const queryTextarea = document.getElementById('generatedQuery');
+            
+            // Restore original query
+            if (originalQueryCode) {
+                queryTextarea.value = originalQueryCode;
+                generatedQueryCode = originalQueryCode;
+            }
+            
+            // Exit edit mode
+            isEditingQuery = false;
+            queryTextarea.readOnly = true;
+            queryTextarea.classList.remove('query-editing');
+            
+            // Update button
+            document.getElementById('editQueryBtn').innerHTML = '<i class="fas fa-edit me-1"></i>Edit Query';
+            document.getElementById('editQueryBtn').classList.remove('btn-outline-danger');
+            document.getElementById('editQueryBtn').classList.add('btn-outline-warning');
+            
+            // Hide edit controls
+            document.getElementById('editControls').style.display = 'none';
+            
+            // Show copy button again
+            document.getElementById('copyQueryBtn').style.display = 'block';
+            
+            addDebugLog('Query editing cancelled', 'info');
+        }
+
+        function resetEditState() {
+            isEditingQuery = false;
+            originalQueryCode = '';
+            document.getElementById('generatedQuery').readOnly = true;
+            document.getElementById('generatedQuery').classList.remove('query-editing');
+            document.getElementById('editQueryBtn').innerHTML = '<i class="fas fa-edit me-1"></i>Edit Query';
+            document.getElementById('editQueryBtn').classList.remove('btn-outline-danger');
+            document.getElementById('editQueryBtn').classList.add('btn-outline-warning');
+            document.getElementById('editControls').style.display = 'none';
+            document.getElementById('copyQueryBtn').style.display = 'block';
+        }
+
+        function copyQueryToClipboard() {
+            const queryText = document.getElementById('generatedQuery').value;
+            if (!queryText.trim()) {
+                showError('No query to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(queryText).then(() => {
+                const copyBtn = document.getElementById('copyQueryBtn');
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                copyBtn.classList.remove('btn-outline-info');
+                copyBtn.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                    copyBtn.classList.remove('btn-success');
+                    copyBtn.classList.add('btn-outline-info');
+                }, 2000);
+                
+                addDebugLog('Query copied to clipboard', 'success');
+            }).catch(err => {
+                addDebugLog('Failed to copy query: ' + err, 'error');
+                showError('Failed to copy query to clipboard');
+            });
+        }
+
+        function executeQuery() {
+            if (!isConnected) {
+                showError('Not connected to Firebase');
+                return;
+            }
+
+            if (!generatedQueryCode) {
+                showError('No query to execute');
+                return;
+            }
+
+            // If we're in edit mode, save changes first
+            if (isEditingQuery) {
+                saveEditedQuery();
+            }
+
+            setExecuteButtonLoading(true);
+            addDebugLog('Executing query with cached connection...', 'info');
+
+            fetch('/api/execute-query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    query: generatedQueryCode
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                displayResults(data);
+                addDebugLog('✅ Query executed successfully using cached connection', 'success');
+            })
+            .catch(error => {
+                addDebugLog('❌ Query execution failed: ' + error.message, 'error');
+                showError('Query execution failed: ' + error.message);
+            })
+            .finally(() => {
+                setExecuteButtonLoading(false);
+            });
+        }
+
+        function displayResults(data) {
+            const container = document.getElementById('resultsContainer');
+            const resultCount = document.getElementById('resultCount');
+            
+            if (data.error) {
+                container.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                resultCount.textContent = 'Error';
+                return;
+            }
+
+            if (data.data && data.data.length > 0) {
+                const columns = Object.keys(data.data[0]);
+                resultCount.textContent = `${data.data.length} results`;
+                
+                let html = `<div class="table-responsive"><table class="table table-dark table-striped"><thead><tr>`;
+                html += columns.map(col => `<th>${col}</th>`).join('') + '</tr></thead><tbody>';
+                
+                data.data.forEach(row => {
+                    html += '<tr>';
+                    columns.forEach(col => {
+                        let value = row[col];
+                        if (value === null || value === undefined) value = 'NULL';
+                        if (typeof value === 'object') value = JSON.stringify(value);
+                        html += `<td>${value}</td>`;
+                    });
+                    html += '</tr>';
+                });
+                
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="alert alert-info">No data returned</div>';
+                resultCount.textContent = 'No results';
+            }
+        }
+
+        function checkExistingConnection() {
+            // Check localStorage for connection_id first
+            const savedConnectionId = localStorage.getItem('firebase_connection_id');
+            if (savedConnectionId) {
+                currentConnectionId = savedConnectionId;
+                addDebugLog('Found saved connection ID: ' + savedConnectionId, 'info');
+            }
+            
+            fetch('/connection-status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.connected && data.db_type === 'firebase') {
+                    addDebugLog('Found existing Firebase connection with server cache', 'success');
+                    isConnected = true;
+                    currentProject = data.project_id || 'Unknown';
+                    currentCollections = data.collections || [];
+                    currentConnectionId = data.connection_id || currentConnectionId;
+                    
+                    document.getElementById('projectInfo').textContent = currentProject;
+                    document.getElementById('collectionsInfo').textContent = currentCollections.join(', ') || 'No collections';
+                    
+                    showQueryInterface();
+                    
+                    // Load schema if not already loaded
+                    if (!data.schema_available) {
+                        loadSchema();
+                    } else {
+                        // If schema is available, load it
+                        fetch('/api/get-schema')
+                        .then(response => response.json())
+                        .then(schemaData => {
+                            if (schemaData.schema) {
+                                document.getElementById('schemaContent').textContent = schemaData.schema;
+                            }
+                        });
+                    }
+                    
+                    // Load collections if not already available
+                    if (currentCollections.length === 0) {
+                        loadCollections();
+                    }
+                }
+            })
+            .catch(() => {});
+        }
+
+        function loadSchema() {
+            fetch('/api/get-schema')
+            .then(response => response.json())
+            .then(data => {
+                if (data.schema) {
+                    document.getElementById('schemaContent').textContent = data.schema;
+                } else if (data.error) {
+                    document.getElementById('schemaContent').textContent = 'Error loading schema: ' + data.error;
+                }
+            })
+            .catch(error => {
+                document.getElementById('schemaContent').textContent = 'Error loading schema: ' + error.message;
+            });
+        }
+
+        function testConnection() {
+            const serviceAccountJson = document.getElementById('service_account_json').value.trim();
+            if (!serviceAccountJson) {
+                showError('Please provide Firebase service account JSON first');
+                return;
+            }
+
+            addDebugLog('Testing connection...', 'info');
+            
+            fetch('/test-connection', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 
+                    db_type: 'firebase', 
+                    credentials: { service_account_json: serviceAccountJson } 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addDebugLog('✅ Connection test successful!', 'success');
+                    showSuccess('Connection test successful!');
+                } else {
+                    addDebugLog('❌ Connection test failed: ' + data.error, 'error');
+                    showError('Connection test failed: ' + data.error);
+                }
+            })
+            .catch(error => {
+                addDebugLog('❌ Connection test failed: ' + error.message, 'error');
+                showError('Connection test failed: ' + error.message);
+            });
+        }
+
+        function checkSession() {
+            addDebugLog('Checking session and cache...', 'info');
+            
+            fetch('/connection-status')
+            .then(response => response.json())
+            .then(data => {
+                addDebugLog('Session data: ' + JSON.stringify(data), 'info');
+                if (data.connection_id) {
+                    addDebugLog('Active connection ID: ' + data.connection_id, 'success');
+                }
+            })
+            .catch(error => {
+                addDebugLog('❌ Session check failed: ' + error.message, 'error');
+            });
+        }
+
+        function clearSession() {
+            if (confirm('Clear session, cache and disconnect?')) {
+                // Clear localStorage
+                localStorage.removeItem('firebase_connection_id');
+                addDebugLog('Clearing session and cache...', 'info');
+                window.location.href = '/disconnect';
+            }
+        }
+
+        function toggleDebug() {
+            const debugPanel = document.querySelector('.debug-panel');
+            const isHidden = debugPanel.style.display === 'none';
+            debugPanel.style.display = isHidden ? 'block' : 'none';
+            addDebugLog('Debug panel ' + (isHidden ? 'shown' : 'hidden'), 'info');
+        }
+
+        function clearResults() {
+            document.getElementById('resultsContainer').innerHTML = 
+                '<div class="text-center text-muted p-4">' +
+                '<i class="fas fa-inbox fa-3x mb-3"></i>' +
+                '<p>No results yet. Generate and execute a query to see data here.</p>' +
+                '</div>';
+            document.getElementById('resultCount').textContent = '0 results';
+            addDebugLog('Results cleared', 'info');
+        }
+
+        // Utility functions
+        function showConnectionStatus(message, type) {
+            const alert = document.getElementById('connectionStatusAlert');
+            alert.style.display = 'block';
+            alert.className = `alert alert-${type}`;
+            document.getElementById('connectionStatusText').textContent = message;
+        }
+
+        function showError(message) {
+            const alert = document.getElementById('errorAlert');
+            alert.style.display = 'block';
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            alert.style.display = 'block';
+            document.getElementById('successText').textContent = message;
+            document.getElementById('errorAlert').style.display = 'none';
+        }
+
+        function setButtonLoading(loading) {
+            const btn = document.getElementById('connectBtn');
+            btn.disabled = loading;
+            btn.innerHTML = loading ? 
+                '<i class="fas fa-spinner fa-spin me-2"></i>Connecting...' : 
+                '<i class="fas fa-plug me-2"></i>Connect to Firebase';
+        }
+
+        function setGenerateButtonLoading(loading) {
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = loading;
+            btn.innerHTML = loading ? 
+                '<i class="fas fa-spinner fa-spin me-2"></i>Generating...' : 
+                '<i class="fas fa-magic me-2"></i>Generate Query';
+        }
+
+        function setExecuteButtonLoading(loading) {
+            const btn = document.getElementById('executeBtn');
+            btn.disabled = loading;
+            btn.innerHTML = loading ? 
+                '<i class="fas fa-spinner fa-spin me-2"></i>Executing...' : 
+                '<i class="fas fa-play me-2"></i>Execute Query';
+        }
+
+        function addDebugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `<span class="status-${type}">[${timestamp}] ${message}</span>`;
+            const output = document.getElementById('debugOutput');
+            output.innerHTML += logEntry + '<br>';
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function testQuery(prompt) {
+            document.getElementById('queryPrompt').value = prompt;
+            generateQuery();
+        }
+
+        function disconnect() {
+            if (confirm('Disconnect from Firebase and clear cache?')) {
+                // Clear localStorage
+                localStorage.removeItem('firebase_connection_id');
+                window.location.href = '/disconnect';
+            }
+        }
+    </script>
 </body>
 </html>

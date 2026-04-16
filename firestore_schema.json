@@ -1,0 +1,669 @@
+{
+    "conversations": {
+        "N4aAJREigsLFyJ5KlnbO": {
+            "participants": [
+                "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+                "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1"
+            ],
+            "createdAt": "2025-10-14T21:07:02.812000+00:00",
+            "lastMessage": {
+                "text": "Hi! I'm interested in your product: Party Sequin Top - $999",
+                "senderId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+                "read": false,
+                "timestamp": "2025-10-14T21:07:22.564000+00:00"
+            },
+            "updatedAt": "2025-10-14T21:07:22.564000+00:00"
+        }
+    },
+    "customerPosts": {
+        "7p5SNTuHaMQPZT1xYXr4": {
+            "description": "I need this cool portronics Mouse.\nIt's not available online.",
+            "type": "NEED",
+            "imageUrl": "https://i.ibb.co/KcGBzd9T/post-image.jpg",
+            "tags": [
+                "electronics "
+            ],
+            "price": 500,
+            "customerName": "Om Kuthe",
+            "customerEmail": "omkuthe10@gmail.com",
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:19:05.471000+00:00",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "urgency": "HIGH",
+            "category": "Electronics ",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "omkuthe10@gmail.com"
+            },
+            "title": "Portronics Mouse",
+            "createdAt": "2025-10-14T20:19:05.471000+00:00",
+            "location": "Wanadongri Nagpur "
+        },
+        "CBdYa6YqNFe4znVrXE3P": {
+            "description": "Ff",
+            "type": "NEED",
+            "imageUrl": "https://i.ibb.co/WWGVxmnB/post-image.jpg",
+            "tags": [
+                "ygf"
+            ],
+            "price": 500,
+            "customerName": "Om Kuthe",
+            "customerEmail": "omkuthe10@gmail.com",
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-15T07:53:42.039000+00:00",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "urgency": "HIGH",
+            "category": "Ygf",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "omkuthe10@gmail.com"
+            },
+            "title": "Ert",
+            "createdAt": "2025-10-15T07:53:42.039000+00:00",
+            "location": "Dfg"
+        },
+        "DaTzvcGv4prsSxbQQaGB": {
+            "description": "I want this Full sleeve arsenal tshirt ",
+            "type": "NEED",
+            "tags": [
+                "clothing "
+            ],
+            "imageUrl": "https://i.ibb.co/TD3dqtZP/post-image.jpg",
+            "price": 500,
+            "customerName": "Om Kuthe",
+            "status": "ACTIVE",
+            "customerEmail": "omkuthe10@gmail.com",
+            "updatedAt": "2025-09-30T11:16:49.787000+00:00",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "urgency": "MEDIUM",
+            "category": "Clothing ",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "omkuthe10@gmail.com"
+            },
+            "title": "Arsenal Tshirt ",
+            "createdAt": "2025-09-30T11:16:49.787000+00:00",
+            "location": "Nagpur "
+        },
+        "I8J0Ggg7zLNf0sC4ykO1": {
+            "description": "Condition is good.\nHeadlights are working.\nGood milage ",
+            "type": "OFFER",
+            "imageUrl": "https://i.ibb.co/KxjByJWd/post-image.jpg",
+            "tags": [
+                "vehicle "
+            ],
+            "price": 300000,
+            "customerName": "Nishant ",
+            "customerEmail": "nishant9211@gmail.com",
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:28:36.256000+00:00",
+            "customerId": "KjkUzBHWgobYsCmcjKZcndOFxaX2",
+            "urgency": "LOW",
+            "category": "Vehicle ",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "nishant9211@gmail.com"
+            },
+            "title": "Mahindra Scorpio ",
+            "createdAt": "2025-10-14T20:28:36.256000+00:00",
+            "location": "Vasudev Nagar, Nagpur "
+        },
+        "Rdsk4sgMXlnCzJyfld2t": {
+            "description": "It is a yellow dress with black belt \n",
+            "type": "NEED",
+            "imageUrl": "https://i.ibb.co/pv2mXXJM/post-image.jpg",
+            "tags": [
+                "clothing "
+            ],
+            "price": 99,
+            "customerName": "Sneha Lilhare",
+            "customerEmail": "sneha@gmail.com",
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:40:45.038000+00:00",
+            "customerId": "JDHXxx7kvbccS3n2r3pse2hkuZl1",
+            "urgency": "MEDIUM",
+            "category": "Clothing ",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "sneha@gmail.com"
+            },
+            "title": "I need this yellow dress",
+            "createdAt": "2025-10-14T20:40:45.038000+00:00",
+            "location": "Ramtek"
+        },
+        "UKoi8SmtxtviQSrJr1LW": {
+            "description": "I need this Borosil Bottle in black color ",
+            "type": "NEED",
+            "imageUrl": "https://i.ibb.co/bMgQDjTm/post-image.jpg",
+            "tags": [
+                "bottle"
+            ],
+            "price": 300,
+            "customerName": "Om Kuthe",
+            "customerEmail": "omkuthe10@gmail.com",
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:38:47.837000+00:00",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "urgency": "MEDIUM",
+            "category": "Bottle",
+            "contactInfo": {
+                "preferredContact": "message",
+                "email": "omkuthe10@gmail.com"
+            },
+            "title": "Borosil Bottle ",
+            "createdAt": "2025-10-14T20:38:47.837000+00:00",
+            "location": "Vasudev Nagar, Nagpur "
+        }
+    },
+    "customers": {
+        "AN6E9rOPiTcy2StvJNtsrHJ3QJw1": {
+            "uid": "AN6E9rOPiTcy2StvJNtsrHJ3QJw1",
+            "address": "Chandrapur ",
+            "fullName": "Blaze",
+            "email": "omkuthe@gmail.com",
+            "phone": "1234567890",
+            "createdAt": "2025-09-30T20:23:01.340000+00:00"
+        },
+        "IKHSxwzbxiQsy5URM3OaxQgdFTa2": {
+            "uid": "IKHSxwzbxiQsy5URM3OaxQgdFTa2",
+            "address": "At. RAMTEK",
+            "email": "lilharenishant009@gmail.com",
+            "fullName": "Nishant Lilhare ",
+            "phone": "9942657831",
+            "createdAt": "2025-10-11T18:41:41.122000+00:00"
+        },
+        "JDHXxx7kvbccS3n2r3pse2hkuZl1": {
+            "uid": "JDHXxx7kvbccS3n2r3pse2hkuZl1",
+            "address": "Ramtek\n",
+            "email": "sneha@gmail.com",
+            "fullName": "Sneha Lilhare",
+            "phone": "0987654123",
+            "createdAt": "2025-10-14T20:39:36.680000+00:00"
+        },
+        "KjkUzBHWgobYsCmcjKZcndOFxaX2": {
+            "uid": "KjkUzBHWgobYsCmcjKZcndOFxaX2",
+            "address": "Vasudev Nagar, Nagpur ",
+            "email": "nishant9211@gmail.com",
+            "fullName": "Nishant ",
+            "phone": "6644223355",
+            "createdAt": "2025-10-14T20:23:42.107000+00:00"
+        },
+        "lRxLJm13SUUa22vM3GOiUWqQhpK2": {
+            "uid": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "address": "Nagpur ",
+            "email": "omkuthe10@gmail.com",
+            "fullName": "Om Kuthe",
+            "phone": "9604448400",
+            "createdAt": "2025-09-29T18:28:09.801000+00:00"
+        }
+    },
+    "offers": {
+        "0baLRITJTPnZOxEUZ8Er": {
+            "shopkeeperName": "Jesse Pinkman",
+            "shopkeeperId": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "shopName": "Electro Shop",
+            "description": "Grab these cool headphones now!!!",
+            "imageUrl": "https://i.ibb.co/TMKBngQ7/product-image.jpg",
+            "tags": [
+                "electronics"
+            ],
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:11:22.606000+00:00",
+            "originalPrice": 6000,
+            "isExpired": false,
+            "terms": "Note: Offer will end soon",
+            "expiryDate": "2025-10-21T20:09:00+00:00",
+            "category": "Electronics",
+            "title": "Diwali Sales 🔥",
+            "createdAt": "2025-10-14T20:11:22.606000+00:00",
+            "discountPrice": 4350,
+            "location": "Lat: 21.1099, Lng: 79.0013"
+        },
+        "bC0STPUgiJhTKuDmi4pD": {
+            "shopkeeperName": "Reader Nishant",
+            "shopkeeperId": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "shopName": "Readers Corner",
+            "description": "Limited time offer on Ramayan ",
+            "imageUrl": "https://i.ibb.co/mCZGH2xd/product-image.jpg",
+            "tags": [
+                "book"
+            ],
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:33:06.341000+00:00",
+            "originalPrice": 700,
+            "isExpired": false,
+            "terms": "",
+            "expiryDate": "2025-10-21T20:31:43.224000+00:00",
+            "category": "Book",
+            "title": "Diwali Offer on Ramayan ",
+            "createdAt": "2025-10-14T20:33:06.341000+00:00",
+            "discountPrice": 580,
+            "location": "Lat: 21.1370, Lng: 79.0614"
+        },
+        "fSkbgbILUHCmddr4ufTD": {
+            "shopkeeperName": "Nishant",
+            "shopkeeperId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "shopName": "UrbanSteps Footwears",
+            "description": "Women's White Leather sandals ",
+            "imageUrl": "https://i.ibb.co/W4HHyxj3/product-image.jpg",
+            "tags": [
+                "footwear "
+            ],
+            "status": "ACTIVE",
+            "updatedAt": "2025-10-14T20:14:20.207000+00:00",
+            "originalPrice": 2400,
+            "isExpired": false,
+            "terms": "",
+            "expiryDate": "2025-10-30T20:13:00+00:00",
+            "category": "Footwear ",
+            "title": "Diwali 50% discount ",
+            "createdAt": "2025-10-14T20:14:20.207000+00:00",
+            "discountPrice": 1200,
+            "location": "Lat: 21.1443, Lng: 79.0789"
+        }
+    },
+    "orders": {
+        "BZjmqmK7CFUWUgflCMsi": {
+            "deliveryAddress": "Chandrapur ",
+            "shopId": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "shopName": "Trendz",
+            "customerId": "AN6E9rOPiTcy2StvJNtsrHJ3QJw1",
+            "totalAmount": 699,
+            "items": [
+                {
+                    "price": 699,
+                    "quantity": 1,
+                    "image": "https://i.ibb.co/C3TW75Ld/product-image.jpg",
+                    "id": "SzAhl9fSgbiYfqsmJWh5",
+                    "name": "V neck Peplum Top"
+                }
+            ],
+            "customerName": "Blaze",
+            "createdAt": "2025-10-14T20:25:47.073000+00:00",
+            "paymentMethod": "cash",
+            "status": "pending",
+            "updatedAt": "2025-10-14T20:25:47.073000+00:00",
+            "customerPhone": "1234567890"
+        },
+        "ba6qCgzAfjK7vIKKDGe0": {
+            "deliveryAddress": "Nagpur ",
+            "shopId": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "shopName": "Readers Corner",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "totalAmount": 870,
+            "items": [
+                {
+                    "price": 870,
+                    "quantity": 1,
+                    "image": "https://i.ibb.co/HpN6T1nq/product-image.jpg",
+                    "id": "LwCvVt8GOGUYRDLOe6ku",
+                    "name": "New Collection "
+                }
+            ],
+            "customerName": "Om Kuthe",
+            "createdAt": "2025-10-15T17:13:40.620000+00:00",
+            "paymentMethod": "cash",
+            "status": "pending",
+            "updatedAt": "2025-10-15T17:13:40.620000+00:00",
+            "customerPhone": "9604448400"
+        },
+        "go9YEZGtCiD7z4bOva79": {
+            "deliveryAddress": "Nagpur ",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "shopName": "UrbanSteps Footwears",
+            "customerId": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "totalAmount": 999,
+            "items": [
+                {
+                    "price": 999,
+                    "quantity": 1,
+                    "image": "https://i.ibb.co/qL4NGxjX/product-image.png",
+                    "id": "1fDkLQB9ZGStXCKLKudX",
+                    "name": "Nike Fly"
+                }
+            ],
+            "customerName": "Om Kuthe",
+            "createdAt": "2025-10-15T17:12:59.924000+00:00",
+            "paymentMethod": "cash",
+            "status": "pending",
+            "updatedAt": "2025-10-15T17:12:59.924000+00:00",
+            "customerPhone": "9604448400"
+        }
+    },
+    "products": {
+        "1fDkLQB9ZGStXCKLKudX": {
+            "description": "Lightweight and adaptive fitting.\nDesigned for comfort and performance.",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "imageUrl": "https://i.ibb.co/qL4NGxjX/product-image.png",
+            "stock": 5,
+            "price": 999,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:11:23.743000+00:00",
+            "name": "Nike Fly"
+        },
+        "5ngfl5eKlLDFPCEcjFsj": {
+            "description": "3 clickable buttons\nAvailable in 2 colors ",
+            "shopId": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "imageUrl": "https://i.ibb.co/8nSg9RbN/product-image.jpg",
+            "stock": 50,
+            "price": 300,
+            "category": "Electronics",
+            "createdAt": "2025-10-14T19:51:13.702000+00:00",
+            "name": "Protronics Mouse "
+        },
+        "6KIpo0d0dKT1OiIO7IZ1": {
+            "description": "New Arrivals\n..",
+            "shopId": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "imageUrl": "https://i.ibb.co/DgtDrzTt/product-image.jpg",
+            "stock": 0,
+            "price": 350,
+            "category": "Books",
+            "createdAt": "2025-10-14T19:59:48.896000+00:00",
+            "name": "Fictional Stories "
+        },
+        "6USOF004l1BYeTYS7bRL": {
+            "imageUrl": "https://i.ibb.co/Cstqsf08/product-image.jpg",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "description": "Sports Shoes\nBreathable material ",
+            "stock": 50,
+            "price": 500,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:14:05.729000+00:00",
+            "name": "Adidas Red Cyclone "
+        },
+        "8TxGVWo73AMQuPAjmnw5": {
+            "description": "128gb Storage \n12gb ram",
+            "shopId": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "imageUrl": "https://i.ibb.co/DFQqFNp/product-image.png",
+            "stock": 5,
+            "price": 25000,
+            "category": "Electronics",
+            "createdAt": "2025-10-14T19:50:09.857000+00:00",
+            "name": "OnePlus 6"
+        },
+        "8z9EsFjVxdUrHKpI494p": {
+            "description": "Exclusive Books\nVisit shop to Rent ",
+            "shopId": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "imageUrl": "https://i.ibb.co/DHRzJcvB/product-image.jpg",
+            "stock": 20,
+            "price": 500,
+            "category": "Books",
+            "createdAt": "2025-10-14T19:58:23.962000+00:00",
+            "name": "New Arrivals !!!"
+        },
+        "9EKq5IohY5vd3VGM40vI": {
+            "description": "Timeless white Top",
+            "shopId": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "imageUrl": "https://i.ibb.co/5gdj4k4V/product-image.jpg",
+            "stock": 10,
+            "price": 999,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:26:41.900000+00:00",
+            "name": "Classic White Top"
+        },
+        "EidWNJXJFsLxaHDjlhK2": {
+            "description": "Air Max+ Drift\n32/36/40 UK",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "imageUrl": "https://i.ibb.co/ccpdxQFH/product-image.jpg",
+            "stock": 4,
+            "price": 50000,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T20:08:34.943000+00:00",
+            "name": "Nike Air Max+"
+        },
+        "EwBs9yrmLTg1vGeXB540": {
+            "description": "Designed for comfort.\nAvailable in all sizes !!!",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "imageUrl": "https://i.ibb.co/wNJt9BrX/product-image.jpg",
+            "stock": 3,
+            "price": 899,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:12:20.551000+00:00",
+            "name": "Nike Green Goblin "
+        },
+        "Kjay0a1D7EpzE9Ycm2cf": {
+            "description": "Sparkly top to shine",
+            "shopId": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "imageUrl": "https://i.ibb.co/nNqgwzVh/product-image.jpg",
+            "stock": 15,
+            "price": 999,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:30:21.512000+00:00",
+            "name": "Party Sequin Top"
+        },
+        "LwCvVt8GOGUYRDLOe6ku": {
+            "description": "Buy or Rent.\nVisit shop to Rent ",
+            "shopId": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "imageUrl": "https://i.ibb.co/HpN6T1nq/product-image.jpg",
+            "stock": 5,
+            "price": 870,
+            "category": "Books",
+            "createdAt": "2025-10-14T20:04:15.017000+00:00",
+            "name": "New Collection "
+        },
+        "QT5woiBXB3fPsws2pabf": {
+            "description": "Peacock photo frame \n",
+            "shopId": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "imageUrl": "https://i.ibb.co/r20TfKBn/product-image.jpg",
+            "stock": 2,
+            "price": 199,
+            "category": "Home",
+            "createdAt": "2025-10-14T20:02:53.889000+00:00",
+            "name": "Photo Frame"
+        },
+        "RfXPvWc1ihuz5pDZtkXN": {
+            "description": "Orange Flower Bush for decor",
+            "shopId": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "imageUrl": "https://i.ibb.co/s9L82b8B/product-image.jpg",
+            "stock": 5,
+            "price": 69,
+            "category": "Home",
+            "createdAt": "2025-10-14T19:59:30.740000+00:00",
+            "name": "Flower Bush"
+        },
+        "VWwi1tI0I9oEMeJ4umr1": {
+            "description": "Decor items for Diwali ",
+            "shopId": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "imageUrl": "https://i.ibb.co/jkbC6P19/product-image.jpg",
+            "stock": 50,
+            "price": 100,
+            "category": "Home",
+            "createdAt": "2025-10-14T20:06:18.665000+00:00",
+            "name": "Diwali Diyas"
+        },
+        "bavWgMR2gaBCic90Ix8t": {
+            "description": "With battery indicator.\nFull charge in 1 hour.",
+            "shopId": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "imageUrl": "https://i.ibb.co/LDpP5Szs/product-image.jpg",
+            "stock": 80,
+            "price": 430,
+            "category": "Electronics",
+            "createdAt": "2025-10-14T20:02:13.516000+00:00",
+            "name": "10000mah Powerbank "
+        },
+        "oqVLdGbMxWF7PnJQ8edq": {
+            "description": "45 days standby time.\nAvailable in 5 colors.",
+            "shopId": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "imageUrl": "https://i.ibb.co/xSgmCCvJ/product-image.jpg",
+            "stock": 60,
+            "price": 4000,
+            "category": "Electronics",
+            "createdAt": "2025-10-14T20:06:45.891000+00:00",
+            "name": "Noise Watch 4"
+        },
+        "pAjdVf4nUgNUmjojXrov": {
+            "description": "Light and breezy",
+            "shopId": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "imageUrl": "https://i.ibb.co/4g9PYG3d/product-image.jpg",
+            "stock": 10,
+            "price": 499,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:25:41.576000+00:00",
+            "name": "Summer Fashion "
+        },
+        "pQbaADG7s6pZwbRcj6Sa": {
+            "description": "Comfortable and Stylish ",
+            "shopId": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "imageUrl": "https://i.ibb.co/DgrKNHFs/product-image.jpg",
+            "stock": 5,
+            "price": 1299,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:29:34.617000+00:00",
+            "name": "Denim Black Jacket "
+        },
+        "r4Gflz3ujjL7hU6amkHN": {
+            "description": "Top Seller \nAvailable in red and blue ",
+            "shopId": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "imageUrl": "https://i.ibb.co/JR39XNpC/product-image.jpg",
+            "stock": 4,
+            "price": 800,
+            "category": "Clothing",
+            "createdAt": "2025-10-14T19:22:24.740000+00:00",
+            "name": "New Curry Shoes"
+        },
+        "uj8UbPhDLQzwgVYay6Rh": {
+            "description": "Colour full bottles \n500 ml",
+            "shopId": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "imageUrl": "https://i.ibb.co/p99tmgN/product-image.jpg",
+            "stock": 30,
+            "price": 300,
+            "category": "Home",
+            "createdAt": "2025-10-14T20:00:15.969000+00:00",
+            "name": "Bottles "
+        },
+        "wB39DdHyexjv4xfm4Vtd": {
+            "description": "Table lamp for your bedroom \n",
+            "shopId": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "imageUrl": "https://i.ibb.co/Hpg7KhZZ/product-image.jpg",
+            "stock": 8,
+            "price": 200,
+            "category": "Home",
+            "createdAt": "2025-10-14T20:02:10.074000+00:00",
+            "name": "Authentic Table lamp"
+        }
+    },
+    "shopkeepers": {
+        "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2": {
+            "uid": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "shopName": "Readers Corner",
+            "phone": "6644882277",
+            "ownerName": "Reader Nishant",
+            "longitude": 79.06136959791183,
+            "createdAt": "2025-10-14T19:55:48.353000+00:00",
+            "latitude": 21.136979562387253,
+            "email": "lilharenishant000@gmail.com",
+            "shopLogo": "",
+            "location": "Lat: 21.1370, Lng: 79.0614",
+            "updatedAt": "2025-10-14T20:41:03.701000+00:00"
+        },
+        "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1": {
+            "uid": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "shopName": "Trendz",
+            "phone": "1234567890",
+            "ownerName": "Alan ",
+            "createdAt": "2025-10-14T19:18:21.053000+00:00",
+            "email": "lilharenishant@gmail.com",
+            "location": "Wadi, Nagpur ",
+            "updatedAt": "2025-10-14T19:18:21.053000+00:00"
+        },
+        "byy2Zr0osZP3cAkBU8f3Cz7TXc32": {
+            "uid": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "shopName": "Electro Shop",
+            "phone": "9955662244",
+            "ownerName": "Jesse Pinkman",
+            "longitude": 79.00131527334452,
+            "createdAt": "2025-10-14T19:28:49.400000+00:00",
+            "latitude": 21.109941907242455,
+            "email": "lilharenishant0010@gmail.com",
+            "shopLogo": "",
+            "location": "Lat: 21.1099, Lng: 79.0013",
+            "updatedAt": "2025-10-14T20:41:34.132000+00:00"
+        },
+        "hKckhDxbUwhh7wQRVoX8CW9j40f2": {
+            "uid": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "shopName": "UrbanSteps Footwears",
+            "phone": "8574285690",
+            "ownerName": "Nishant",
+            "longitude": 78.98709621280432,
+            "createdAt": "2025-09-30T09:03:55.340000+00:00",
+            "latitude": 21.12565869932028,
+            "email": "lilharenishant007@gmail.com",
+            "shopLogo": "",
+            "location": "Lat: 21.1257, Lng: 78.9871",
+            "updatedAt": "2025-10-14T20:42:26.072000+00:00"
+        },
+        "j3a5veOLy9P1v76iKc9SQXY9u6S2": {
+            "uid": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "shopName": "Homiz",
+            "phone": "1234567890",
+            "ownerName": "Frahan",
+            "createdAt": "2025-10-14T19:57:43.880000+00:00",
+            "email": "nishant@gmail.com",
+            "location": "Momin pura",
+            "updatedAt": "2025-10-14T19:57:43.880000+00:00"
+        }
+    },
+    "users": {
+        "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2": {
+            "profileCompleted": true,
+            "uid": "3cdWDMmXeQbWTVAJx99D2ZZL2IQ2",
+            "createdAt": "2025-10-14T19:54:55.149000+00:00",
+            "email": "lilharenishant000@gmail.com",
+            "role": "shopkeeper"
+        },
+        "AN6E9rOPiTcy2StvJNtsrHJ3QJw1": {
+            "profileCompleted": true,
+            "createdAt": "2025-09-30T20:22:39.367000+00:00",
+            "uid": "AN6E9rOPiTcy2StvJNtsrHJ3QJw1",
+            "email": "omkuthe@gmail.com",
+            "role": "customer"
+        },
+        "JDHXxx7kvbccS3n2r3pse2hkuZl1": {
+            "profileCompleted": true,
+            "uid": "JDHXxx7kvbccS3n2r3pse2hkuZl1",
+            "createdAt": "2025-10-14T20:39:10.357000+00:00",
+            "email": "sneha@gmail.com",
+            "role": "customer"
+        },
+        "KjkUzBHWgobYsCmcjKZcndOFxaX2": {
+            "profileCompleted": true,
+            "uid": "KjkUzBHWgobYsCmcjKZcndOFxaX2",
+            "createdAt": "2025-10-14T20:23:17.349000+00:00",
+            "email": "nishant9211@gmail.com",
+            "role": "customer"
+        },
+        "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1": {
+            "profileCompleted": true,
+            "uid": "Ss5Wts4HhEVYoFk8HzqV4m4tVoi1",
+            "createdAt": "2025-10-14T19:16:57.573000+00:00",
+            "email": "lilharenishant@gmail.com",
+            "role": "shopkeeper"
+        },
+        "byy2Zr0osZP3cAkBU8f3Cz7TXc32": {
+            "profileCompleted": true,
+            "uid": "byy2Zr0osZP3cAkBU8f3Cz7TXc32",
+            "createdAt": "2025-10-14T19:27:53.774000+00:00",
+            "email": "lilharenishant0010@gmail.com",
+            "role": "shopkeeper"
+        },
+        "hKckhDxbUwhh7wQRVoX8CW9j40f2": {
+            "profileCompleted": true,
+            "uid": "hKckhDxbUwhh7wQRVoX8CW9j40f2",
+            "email": "lilharenishant007@gmail.com",
+            "role": "shopkeeper"
+        },
+        "j3a5veOLy9P1v76iKc9SQXY9u6S2": {
+            "profileCompleted": true,
+            "uid": "j3a5veOLy9P1v76iKc9SQXY9u6S2",
+            "createdAt": "2025-10-14T19:45:28.024000+00:00",
+            "email": "nishant@gmail.com",
+            "role": "shopkeeper"
+        },
+        "lRxLJm13SUUa22vM3GOiUWqQhpK2": {
+            "profileCompleted": true,
+            "uid": "lRxLJm13SUUa22vM3GOiUWqQhpK2",
+            "email": "omkuthe10@gmail.com",
+            "role": "customer"
+        }
+    }
+}
